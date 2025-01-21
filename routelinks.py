@@ -6,6 +6,7 @@ from selenium.common.exceptions import NoSuchElementException
 import time
 import pandas as pd
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait as wait
 
 
 PATH = "C:\Program Files\Drivers\chromedriver.exe"
@@ -19,7 +20,7 @@ Link = []
 
 driver.get('https://www.redbus.in/online-booking/ksrtc-kerala/?utm_source=rtchometile')
 
-time.sleep(10)
+time.sleep(5)
 
 all_routes =  driver.find_elements(By.XPATH,"//div[@class='route_link']")
 
@@ -31,13 +32,22 @@ for route in all_routes:
             
         except NoSuchElementException:
             route_details.append("NA")
-        
-     
+
+            
         try:
             route_link = route_name.get_attribute("href")
             Link.append(route_link)
         except NoSuchElementException:
             Link.append("NA")
 
+
+df = pd.DataFrame(zip(route_details,Link),columns=["Route","Link"])
+df.to_excel('Routes.xlsx')
+
 # driver.find_element(By.XPATH,"//a[@class='route']").click()
-print(Link)
+# 
+# height = driver.execute_script("return document.body.scrollHeight")
+# while True:
+#     driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+
+
